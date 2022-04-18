@@ -15,8 +15,7 @@ import numpy as np
 # função para carregar os dados de treinameto a partir das imagens
 def getDataImage( path):
     #Read image
-    img = Image.open( path )
-    # create the pixel map
+    img = Image.open( path )    # create the pixel map
     pixels = img.load() 
     data = []
     pixel = []
@@ -33,36 +32,38 @@ def getDataImage( path):
     return data
 
 # carregando a primeira imagem
-dataTraining =  getDataImage( 'img\\7b.png' )
-size = 40 * 40 * 3
+dataTraining =  getDataImage( 'img\\1.jpeg' )
+size = 50 * 50 * 3
 
 # configurando a rede neural artificial e o dataSet de treinamento
-network = buildNetwork( size, 12, 12, 4 )  # define network
-dataSet = SupervisedDataSet( size, 4 )     # define dataSet
+network = buildNetwork( size, 100, 30, 4 )  # define network
+dataSet = SupervisedDataSet( size, 4 )      # define dataSet
 
 
 # load dataSet
-dataSet.addSample ( getDataImage( 'img\\7b.png' ), (7, 7, 7, 7) )       # 7anos
-dataSet.addSample ( getDataImage( 'img\\7c.png' ), (7, 7, 7, 7) )       # 7anos
-dataSet.addSample ( getDataImage( 'img\\7d.png' ), (7, 7, 7, 7) )       # 7anos
-dataSet.addSample ( getDataImage( 'img\\7e.png' ), (7, 7, 7, 7) )       # 7anos
-dataSet.addSample ( getDataImage( 'img\\18b.png' ), (18, 18, 18, 18) )  # 18 anos
-dataSet.addSample ( getDataImage( 'img\\18c.png' ), (18, 18, 18, 18) )  # 18 anos
-dataSet.addSample ( getDataImage( 'img\\18d.png' ), (18, 18, 18, 18) )  # 18 anos
-dataSet.addSample ( getDataImage( 'img\\18e.png' ), (18, 18, 18, 18) )  # 18 anos
+dataSet.addSample ( getDataImage( 'img\\1.jpeg' ), (0, 0, 0, 0) )       # nlubrificada
+dataSet.addSample ( getDataImage( 'img\\2.jpeg' ), (1, 1, 1, 1) )       # lubrificada
+dataSet.addSample ( getDataImage( 'img\\3.jpeg' ), (0, 0, 0, 0) )       # nlubrificada
+dataSet.addSample ( getDataImage( 'img\\4.jpeg' ), (1, 1, 1, 1) )       # lubrificada
+dataSet.addSample ( getDataImage( 'img\\5.jpeg' ), (0, 0, 0, 0) )  # nlubrificada
+dataSet.addSample ( getDataImage( 'img\\6.jpeg' ), (0, 0, 0, 0) )  # nlubrificada
 
 # trainer
 trainer = BackpropTrainer( network, dataSet)
 error = 1
 iteration = 0
 outputs = []
+file = open ("output.txt", "w")
 while error > 0.001: 
     error = trainer.train()
     outputs.append( error )
     iteration += 1    
     print ( iteration, error )
+    file.write(str( error ) + "\n")
+    
 
 
+file.close()
 
 # plot graph
 plt.ioff()
@@ -72,7 +73,7 @@ plt.ylabel('Erro Quadrático')
 plt.show()
 
 # Fase de teste
-name = ['11t.png', '16t.png', '22t.png' ]
+name = ['1.jpeg', '2.jpeg', '3.jpeg','4.jpeg', '5.jpeg', '6.jpeg']
 for i in range( len(name) ):
     path = "img\\test\\" + name[i]
     print ( path )
